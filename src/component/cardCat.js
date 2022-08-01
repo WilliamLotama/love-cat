@@ -16,18 +16,6 @@ function CardCat({ item }) {
       </div> */}
       <div className="desc">{item.description.slice(0, 250) + "..."}</div>
       <div className="date"> Life Span : {item.life_span}</div>
-      <div className="mt-3 mb-2">
-        <div className="d-flex justify-content-center">
-          <Button
-            onClick={() => setOpen(!open)}
-            aria-controls="example-collapse-text"
-            aria-expanded={open}
-            style={{ backgroundColor: "#f3c998", borderColor: "#ffa640" }}
-          >
-            {open ? "Read Less" : "Read More"}
-          </Button>
-        </div>
-
         <div className="mt-2">
           <Collapse in={open}>
             <div id="example-collapse-text">
@@ -41,6 +29,18 @@ function CardCat({ item }) {
             </div>
           </Collapse>
         </div>
+      <div className="mt-3 mb-2">
+        <div className="d-flex justify-content-center">
+          <Button
+            onClick={() => setOpen(!open)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open}
+            style={{ backgroundColor: "#f3c998", borderColor: "#ffa640" }}
+          >
+            {open ? "Read Less" : "Read More"}
+          </Button>
+        </div>
+
       </div>
     </>
   );

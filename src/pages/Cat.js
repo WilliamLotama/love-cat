@@ -6,29 +6,43 @@ import Search from "../component/Search";
 import { useNavigate } from "react-router-dom";
 import Sort from "../component/sort";
 import InfiniteScroll from "react-infinite-scroll-component";
-
-const fetchNextImages = (page, setCat, setPage, setHasmore) => {};
+import Loader from "../component/Loader";
+import EndMsg from "../component/EndMsg";
 
 function Cat() {
   const navigate = useNavigate();
   const [cat, setCat] = useState([]);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("asc");
-  const [hasMore, setHasmore] = useState(false);
-  const [page, setPage] = useState(1);
+  const [hasMore, sethasMore] = useState(true);
+
+  const [page, setpage] = useState(2);
 
   useEffect(() => {
-    axios
-      .get("https://api.thecatapi.com/v1/breeds")
-      .then((result) => {
-        const response = result.data;
-        // console.log(response);
-        setCat(response);
-      })
-      .catch((err) => {
-        // console.log("error", err);
-      });
+    const getComments = async () => {
+      const res = await fetch(`https://api.thecatapi.com/v1/breeds?_page=1&_limit=10`);
+      const data = await res.json();
+      setCat(data);
+    };
+
+    getComments();
   }, [sort]);
+
+  const fetchComments = async () => {
+    const res = await fetch(`https://api.thecatapi.com/v1/breeds?_page=${page}&_limit=10`);
+    const data = await res.json();
+    return data;
+  };
+
+  const fetchData = async () => {
+    const commentsFormServer = await fetchComments();
+
+    setCat([...cat, ...commentsFormServer]);
+    if (commentsFormServer.length === 0 || commentsFormServer.length < 10) {
+      sethasMore(false);
+    }
+    setpage(page + 1);
+  };
 
   const DataSearch = cat.filter((item) => item.name.toLowerCase().includes(search));
   const DataSort =
@@ -60,19 +74,27 @@ function Cat() {
 
       {/* card */}
 
-      <div className="container">
-        <div className="row justify-content-center m-2">
-          {DataSort?.map((item) => {
-            return (
-              <div className="col-md-4 justify-content-center">
-                <div className="card">
-                  <CardCat item={item} key={item.id} />
+      <InfiniteScroll
+        dataLength={cat.length} //This is important field to render the next data
+        next={fetchData}
+        hasMore={hasMore}
+        loader={<Loader />}
+        endMessage={<EndMsg />}
+      >
+        <div className="container">
+          <div className="row justify-content-center m-2">
+            {DataSort?.map((item) => {
+              return (
+                <div className="col-md-4 justify-content-center">
+                  <div className="card">
+                    <CardCat item={item} key={item.id} />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
+      </InfiniteScroll>
     </div>
   );
 }
