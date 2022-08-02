@@ -33,10 +33,10 @@ function Cat() {
   };
 
   const fetchData = async () => {
-    const catFormServer = await fetchCat();
+    // const catFormServer = await fetchCat();
 
-    setCat([...cat, ...catFormServer]);
-    if (catFormServer.length === 0 || catFormServer.length < 10) {
+    setCat([...cat, ...DataSort]);
+    if (DataSort.length === 0 || DataSort.length < 10) {
       sethasMore(false);
     }
     setpage(page + 1);

@@ -13,7 +13,7 @@ function Home() {
             <img src={Logo2} width="280px" alt="logo" />
             <div className="d-flex flex-wrap justify-content-center " style={{ marginTop: "3px" }}>
               <div className="titleHome" onClick={() => navigate("/cat")}>
-                Adobt Me
+                Find Yours
               </div>
             </div>
           </div>
