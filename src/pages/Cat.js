@@ -3,14 +3,12 @@ import CardCat from "../component/cardCat";
 import Navbar from "../component/Navbar";
 import axios from "axios";
 import Search from "../component/Search";
-import { useNavigate } from "react-router-dom";
 import Sort from "../component/sort";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "../component/Loader";
 import EndMsg from "../component/EndMsg";
 
 function Cat() {
-  const navigate = useNavigate();
   const [cat, setCat] = useState([]);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("asc");
@@ -19,26 +17,26 @@ function Cat() {
   const [page, setpage] = useState(2);
 
   useEffect(() => {
-    const getComments = async () => {
+    const getCat = async () => {
       const res = await fetch(`https://api.thecatapi.com/v1/breeds?_page=1&_limit=10`);
       const data = await res.json();
       setCat(data);
     };
 
-    getComments();
+    getCat();
   }, [sort]);
 
-  const fetchComments = async () => {
+  const fetchCat = async () => {
     const res = await fetch(`https://api.thecatapi.com/v1/breeds?_page=${page}&_limit=10`);
     const data = await res.json();
     return data;
   };
 
   const fetchData = async () => {
-    const commentsFormServer = await fetchComments();
+    const catFormServer = await fetchCat();
 
-    setCat([...cat, ...commentsFormServer]);
-    if (commentsFormServer.length === 0 || commentsFormServer.length < 10) {
+    setCat([...cat, ...catFormServer]);
+    if (catFormServer.length === 0 || catFormServer.length < 10) {
       sethasMore(false);
     }
     setpage(page + 1);
